@@ -1,5 +1,5 @@
 var key = require('../utils/key');
-var appID = require('../utils/appID');
+var app_id = require('../utils/appID');
 var request = require('request');
 var _ = require('underscore');
 var createTemplate = require('../utils/template.js').resolver;
@@ -17,7 +17,7 @@ function handleSearchString(term, req, res) {
     url: 'https://api.edamam.com/search',
     qs: {
       r: term,
-      app_id: appID,
+      app_id: app_id,
       app_key: key
     },
     gzip: true,

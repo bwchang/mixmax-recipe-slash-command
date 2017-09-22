@@ -1,3 +1,5 @@
+// Consulted from https://github.com/simonxca/mixmax-soundcloud-slash-command
+
 // Simple templating functions. Interprets all template variables <%...%> as code and
 //  execute them, replacing the template variable with the result
 var fs = require('fs');

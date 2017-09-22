@@ -17,4 +17,4 @@ Typeahead API URL: https://localhost:9145/typeahead
 Resolver API URL: https://localhost:9145/resolver
 ```
 6. Refresh Gmail with Mixmax installed.
-7. Compose an email and enter `/recipe` to search for recipes.
+7. Compose an email and enter `/recipes` to search for recipes.
