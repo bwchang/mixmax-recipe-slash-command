@@ -51,6 +51,7 @@ module.exports = function(req, res) {
   }
 
   var label_name = health_labels[selected_label];
+  // Search term for the recipe
   var recipe_term = term.slice((selected_label + ': ').length);
 
   if (!recipe_term) {
@@ -78,8 +79,14 @@ module.exports = function(req, res) {
     json: true,
     timeout: 10 * 1000
   }, function(err, response) {
-    if (err || response.statusCode !== 200 || !response.body) {
-      console.log('error');
+    // Handle case where API call limit has been reached
+    if (response.statusCode == 401) {
+      res.json([{
+        title: '<i>(Sorry, please wait 1 minute before trying again)</i>',
+        text: ''
+      }]);
+      return;
+    } else if (err || response.statusCode !== 200 || !response.body) {
       res.status(500).send('Error');
       return;
     }
