@@ -2,7 +2,7 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  border: 2px solid rgba(255, 100, 0, 0.3);
+  border: 2px solid #6CCA00;
   border-radius: 2px;
   padding: 0.45rem;
 ">
@@ -36,11 +36,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
       width: 445px;
+      color: gray;
     ">
-      <%
+      <i><%
         if (data.source) return data.source;
         return 'Edamam';
-      %>
+      %></i>
     </div>
     <br>
     <div>
