@@ -4,22 +4,14 @@ var request = require('request');
 var _ = require('underscore');
 var createTemplate = require('../utils/template.js').typeahead;
 
+// Health labels that the user can use to filter recipes
 var health_labels = {
   "All": "all",
   "Vegetarian": "vegetarian",
   "Vegan": "vegan",
-  "Dairy Free": "dairy-free",
-  "Kosher": "kosher",
-  "Gluten Free": "gluten-free",
+  "Sugar Conscious": "sugar-conscious",
   "Peanut Free": "peanut-free",
-  "Pescatarian": "pescatarian",
-  "Wheat Free": "wheat-free",
-  "Pork Free": "pork-free",
-  "Red Meat Free": "red-meat-free",
-  "Shellfish Free": "shellfish-free",
-  "Egg Free": "egg-free",
-  "No Oil": "no-oil-added",
-  "No Sugar": "low-sugar",
+  "Tree Nut Free": "tree-nut-free",
   "Alcohol Free": "alcohol-free"
 };
 
@@ -27,15 +19,15 @@ var health_labels = {
 module.exports = function(req, res) {
   var term = req.query.text.trim();
 
-  // If a user has selected a valid genre, then it will be the prefix of the search string
+  // If a user has selected a valid label, then it will be the prefix of the search string
   var selected_label = _.find(_.keys(health_labels), function(key) {
-    return term.indexOf(key + ': ') === 0; // Search prefix.
+    return term.indexOf(key + ':') === 0;
   });
 
-  // If the user doesn't have a valid genre selected, then assume they're still searching genres.
+  // If the user doesn't have a valid label selected, then assume they're still searching labels
   if (!selected_label) {
     var matching_labels = _.filter(_.keys(health_labels), function(label) {
-      // Show all genres if there is no search string
+      // Show all labels if there is no search string
       if (term.trim() === '') return true;
 
       return label.toLowerCase().indexOf(term.toLowerCase()) >= 0;
@@ -51,7 +43,7 @@ module.exports = function(req, res) {
         return {
           title: label,
           text: label + ': ',
-          resolve: false // Don't automatically resolve and remove the text (keep searching instead).
+          resolve: false
         };
       }));
     }
@@ -69,36 +61,44 @@ module.exports = function(req, res) {
     return;
   }
 
+  // Only pass in the health label if it's not All
+  var params = {
+    q: recipe_term,
+    app_id: app_id,
+    app_key: key
+  }
+  if (label_name != 'all') {
+    params['health'] = label_name;
+  }
+
   request({
     url: 'https://api.edamam.com/search',
-    qs: {
-      q: recipe_term,
-      app_id: app_id,
-      app_key: key
-    },
+    qs: params,
     gzip: true,
     json: true,
     timeout: 10 * 1000
   }, function(err, response) {
-    if (err || response.statusCode !== 200 || !response.body || !response.body.hits) {
+    if (err || response.statusCode !== 200 || !response.body) {
+      console.log('error');
       res.status(500).send('Error');
       return;
     }
 
-    var results = _.chain(response.body.hits)
+    if (response.body.hits) {
+      var results = _.chain(response.body.hits)
       .reject(function(hit) {
         return !hit || !hit.recipe || !hit.recipe.image;
       })
       .map(function(hit) {
-
         return {
           title: createTemplate(hit.recipe),
           text: hit.recipe.uri.replace('#', '%23')
         };
       })
       .value();
+    }
 
-    if (results.length === 0) {
+    if (!response.body.hits || results.length === 0) {
       res.json([{
         title: '<i>(no results)</i>',
         text: ''

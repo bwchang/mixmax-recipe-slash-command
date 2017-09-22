@@ -8,7 +8,6 @@ var createTemplate = require('../utils/template.js').resolver;
 module.exports = function(req, res) {
   var term = req.query.text.trim();
   term = term.replace('%23', '#');
-  console.log(term);
   handleSearchString(term, req, res);
 };
 
