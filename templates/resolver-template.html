@@ -1,0 +1,66 @@
+<div style="
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  border: 2px solid rgba(255, 100, 0, 0.3);
+  border-radius: 2px;
+  padding: 0.45rem;
+">
+  <a href="<% return data.url %>" target="_blank">
+    <img style="
+      height: 100px;
+      border-radius: 2px;
+    " src="<% return data.image %>">
+  </a>
+  <div style="
+    font-family: Proxima Nova, Helvetica Neue, sans-serif;
+    margin-left: 1rem;
+  ">
+    <div style="
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 445px;
+    ">
+      <a href="<% return data.url %>" target="_blank" style="
+        text-decoration: none;
+        color: rgb(33, 33, 33);
+      ">
+        <% return data.label %>
+      </a>
+    </div>
+    <div style="
+      font-size: 0.85rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 445px;
+    ">
+      <%
+        if (data.source) return data.source;
+        return 'Edamam';
+      %>
+    </div>
+    <br>
+    <div>
+      <span style="
+        font-size: 0.9rem;
+      ">Ingredients</span>
+      <br>
+      <div style="
+        font-size: 0.8rem;
+        color: rgb(88, 88, 88);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 445px;
+      ">
+        <%
+          if (data.ingredientLines) return data.ingredientLines.join(', ');
+          return 'No ingredients available.' 
+        %>
+      </div>
+    </div>
+  </div>
+</div>
