@@ -36,5 +36,5 @@ Once you choose a recipe, it will be embedded within your email with a link to t
 Unfortunately, the free version of the Edamam recipes API limits me to 5 calls per minute. As a result, you must wait a minute after choosing around two recipes. If you see the following, it means that the call limit has been reached: <br>
 ![labels](images/error1.png)
 <br>
-![labels](images/erro2.png)
+![labels](images/error2.png)
 <br>
